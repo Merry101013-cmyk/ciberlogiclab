@@ -1549,9 +1549,21 @@
     }
 
     function renderScene(sim, state, actualOutputs) {
-      ui.sceneImage.style.display = sim.sceneImage ? "block" : "none";
-      ui.sceneImage.src = sim.sceneImage || "";
-      sim.renderScene(state.data, actualOutputs, ui.sceneSvg);
+      if (sim.id === "sim6" && sim.sceneImage) {
+        ui.sceneImage.style.display = "none";
+        ui.sceneSvg.innerHTML = `
+          <rect width="860" height="430" fill="#fbfdff"></rect>
+          <image href="${sim.sceneImage}" x="20" y="20" width="820" height="300" preserveAspectRatio="xMidYMid meet"></image>
+          <rect x="36" y="338" width="788" height="70" rx="16" fill="#f7fafc" stroke="#d8e3ee"></rect>
+          <text x="58" y="366" fill="#45376f" font-size="20">Estado del sistema</text>
+          <text x="58" y="394" fill="#24364a" font-size="18">A = ${state.data.manual.A} | X = ${state.data.manual.X} | B = ${state.data.manual.B} | P = ${state.data.manual.P}</text>
+          <text x="500" y="394" fill="#24364a" font-size="18">M = ${actualOutputs.M} | V = ${actualOutputs.V}</text>
+        `;
+      } else {
+        ui.sceneImage.style.display = sim.sceneImage ? "block" : "none";
+        ui.sceneImage.src = sim.sceneImage || "";
+        sim.renderScene(state.data, actualOutputs, ui.sceneSvg);
+      }
       ui.sceneStatus.textContent = sim.status(state.data, actualOutputs);
     }
 
